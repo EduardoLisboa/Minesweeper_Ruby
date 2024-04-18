@@ -8,7 +8,7 @@ require_relative 'images'
   width=600,
   height=600,
   title="Minesweeper",
-  square_size=600/20,
+  grid_size=20,
   qtd_bombs=60,
   fps=60
 )
