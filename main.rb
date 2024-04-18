@@ -43,8 +43,28 @@ def parse_click(event)
   [x / @CONSTANTS.square_size, y / @CONSTANTS.square_size]
 end
 
+def right_click(x, y)
+  Image.new(
+    @IMAGES.IMG_HASH['flag'],
+    x: x * @CONSTANTS.square_size,
+    y: y * @CONSTANTS.square_size,
+    width: @CONSTANTS.square_size,
+    height: @CONSTANTS.square_size,
+    z: 9
+  )
+end
+
+
 settings
 draw_grid
+
+Text.new(
+  "BOMBS LEFT: #{@CONSTANTS.qtd_bombs}",
+  x: 0, y: @CONSTANTS.height,
+  size: 40,
+  color: 'white',
+  z: 10
+)
 
 on :mouse_down do |event|
   # X and Y position of the mouse
@@ -54,10 +74,10 @@ on :mouse_down do |event|
   case event.button
   when :left
     # TODO: Open square
-    puts "Left click"
+    # left_click(x, y)
   when :right
     # TODO: Put/remove flag
-    puts "Right click"
+    right_click(x, y)
   end
 end
 
