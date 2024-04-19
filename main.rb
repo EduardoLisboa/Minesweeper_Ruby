@@ -5,29 +5,15 @@ require_relative 'images'
 require_relative 'board'
 require_relative 'game'
 
-# def draw_grid
-#   clear
-#   (0..@CONSTANTS.width).step(@CONSTANTS.square_size) do |x|
-#     # Horizontal lines
-#     Line.new(
-#       x1: x, y1: 0,
-#       x2: x, y2: @CONSTANTS.height,
-#       color: '#464646'
-#     )
-#     # Vertical lines
-#     Line.new(
-#       x1: 0, y1: x,
-#       x2: @CONSTANTS.width, y2: x,
-#       color: '#464646'
-#     )
-#   end
-# end
+@constants = Constants.new
+@images = Images.new
+@game = Game.new
 
 def parse_click(event)
   x, y = event.x, event.y
 
-  mouse_x = x / @CONSTANTS.square_size
-  mouse_y = y / @CONSTANTS.square_size
+  mouse_x = x / @constants.square_size
+  mouse_y = y / @constants.square_size
 
   if mouse_x > 19
     mouse_x = 19
@@ -39,28 +25,9 @@ def parse_click(event)
   [mouse_x, mouse_y]
 end
 
-# def handle_end_game(board, win)
-#   board.draw_grid
-#   if win
-#     board.print_text("YOU WIN!")
-#   else
-#     board.print_text("YOU LOSE!")
-#   end
-#   show
-#   sleep(3)
-#   play_game
-# end
-
-# def right_click(x, y)
-#   board.game_board[x, y].switch_flag
-# end
-
-# def left_click(x, y)
-#   bomb = board.game_board[x, y].click
-#   if bomb
-#     handle_end_game(board, false)
-#   end
-# end
+def right_click(x, y)
+  @game.board.game_board[x][y].switch_flag
+end
 
 def play_game
   on :mouse_down do |event|
@@ -75,14 +42,12 @@ def play_game
       puts "Left click"
     when :right
       # TODO: Put/remove flag
-      # right_click(x, y)
-      puts "Right click"
+      right_click(x, y)
     end
+
+    @game.draw_board
   end
 end
-
-@constants = Constants.new
-@images = Images.new
 
 def settings
   set title: @constants.title
@@ -91,5 +56,6 @@ def settings
 end
 
 settings
-Game.new
+# Game.new
+play_game
 show

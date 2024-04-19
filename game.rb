@@ -6,6 +6,8 @@ require_relative 'images'
 
 class Game
 
+  attr_reader :board
+
   def initialize
     @images = Images.new
     @constants = Constants.new
@@ -15,6 +17,8 @@ class Game
     puts "Game initialized"
   end
 
-
+  def draw_board
+    @board.draw_board
+  end
 
 end

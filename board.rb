@@ -10,47 +10,9 @@ class Board
     @game_board = create_board
     @constants = Constants.new
     @images = Images.new
-    start_game
-  end
-
-  def start_game
     create_bombs
     update_neighbors
     draw_grid
-    # draw_board
-  end
-
-  def create_board
-    board = []
-    (0...20).each do |row|
-      board << []
-      (0...20).each do |col|
-        board[row] << Spot.new(row, col)
-      end
-    end
-    board
-  end
-
-  def create_bombs
-    (0..@constants.qtd_bombs).each do |_|
-      row = rand(0..19)
-      col = rand(0..19)
-      while @game_board[row][col].is_bomb
-        row = rand(0..19)
-        col = rand(0..19)
-      end
-      @game_board[row][col].is_bomb = true
-      @game_board[row][col].image = @images.IMG_HASH['bomb']
-    end
-  end
-
-  def update_neighbors
-    @game_board.each do |row|
-      row.each do |spot|
-        spot.update_neighbors(@game_board)
-        spot.calc_number
-      end
-    end
   end
 
   def draw_grid
@@ -74,6 +36,7 @@ class Board
         color: '#464646'
       )
     end
+    handle_bombs_left
   end
 
   def draw_board(reveal_bombs=false)
@@ -125,7 +88,7 @@ class Board
   end
 
   def handle_bombs_left
-    bombs_left = Board.count_bombs_left
+    bombs_left = count_bombs_left
     Text.new(
       "BOMBS LEFT: #{bombs_left}",
       x: 0, y: @constants.height,
@@ -143,6 +106,41 @@ class Board
       color: 'white',
       z: 10
     )
+  end
+
+  private
+
+  def create_board
+    board = []
+    (0...20).each do |row|
+      board << []
+      (0...20).each do |col|
+        board[row] << Spot.new(row, col)
+      end
+    end
+    board
+  end
+
+  def create_bombs
+    (0..@constants.qtd_bombs).each do |_|
+      row = rand(0..19)
+      col = rand(0..19)
+      while @game_board[row][col].is_bomb
+        row = rand(0..19)
+        col = rand(0..19)
+      end
+      @game_board[row][col].is_bomb = true
+      @game_board[row][col].image = @images.IMG_HASH['bomb']
+    end
+  end
+
+  def update_neighbors
+    @game_board.each do |row|
+      row.each do |spot|
+        spot.update_neighbors(@game_board)
+        spot.calc_number
+      end
+    end
   end
 
 end
