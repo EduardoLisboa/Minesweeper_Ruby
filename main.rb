@@ -3,16 +3,7 @@ require "ruby2d"
 require_relative 'constants'
 require_relative 'images'
 require_relative 'board'
-
-@IMAGES = Images.new
-@CONSTANTS = Constants.new
-@BOARD = Board.new
-
-def settings
-  set title: @CONSTANTS.title
-  set icon: @CONSTANTS.bomb_icon
-  set width: @CONSTANTS.width, height: @CONSTANTS.height + 50
-end
+require_relative 'game'
 
 # def draw_grid
 #   clear
@@ -48,28 +39,28 @@ def parse_click(event)
   [mouse_x, mouse_y]
 end
 
-def handle_end_game(board, win)
-  board.draw_grid
-  if win
-    board.print_text("YOU WIN!")
-  else
-    board.print_text("YOU LOSE!")
-  end
-  show
-  sleep(3)
-  play_game
-end
+# def handle_end_game(board, win)
+#   board.draw_grid
+#   if win
+#     board.print_text("YOU WIN!")
+#   else
+#     board.print_text("YOU LOSE!")
+#   end
+#   show
+#   sleep(3)
+#   play_game
+# end
 
-def right_click(x, y)
-  board.game_board[x, y].switch_flag
-end
+# def right_click(x, y)
+#   board.game_board[x, y].switch_flag
+# end
 
-def left_click(x, y)
-  bomb = board.game_board[x, y].click
-  if bomb
-    handle_end_game(board, false)
-  end
-end
+# def left_click(x, y)
+#   bomb = board.game_board[x, y].click
+#   if bomb
+#     handle_end_game(board, false)
+#   end
+# end
 
 def play_game
   on :mouse_down do |event|
@@ -80,14 +71,25 @@ def play_game
     case event.button
     when :left
       # TODO: Open square
-      left_click(x, y)
+      # left_click(x, y)
+      puts "Left click"
     when :right
       # TODO: Put/remove flag
-      right_click(x, y)
+      # right_click(x, y)
+      puts "Right click"
     end
   end
 end
 
+@constants = Constants.new
+@images = Images.new
+
+def settings
+  set title: @constants.title
+  set icon: @images.bomb_icon
+  set width: @constants.width, height: @constants.height + 50
+end
+
 settings
-play_game
+Game.new
 show

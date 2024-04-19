@@ -3,12 +3,16 @@ require_relative 'constants'
 
 class Spot
 
+  attr_accessor :row, :col, :is_bomb, :number, :neighbors, :clicked, :is_flagged, :image
+
   def initialize(row, col)
     @row = row
     @col = col
     @x = @row * 30
     @y = @col * 30
-    @image = @IMAGES.IMG_HASH['empty']
+    @constants = Constants.new
+    @images = Images.new
+    @image = @images.IMG_HASH['empty']
     @is_bomb = false
     @number = 0
     @is_flagged = false
@@ -46,7 +50,7 @@ class Spot
         if i == 0 && j == 0
           next
         end
-        if 0 <= @row + i && @row + i < @CONSTANTS.grid_size && 0 <= @col + j && @col + j < @CONSTANTS.grid_size
+        if 0 <= @row + i && @row + i < @constants.grid_size && 0 <= @col + j && @col + j < @constants.grid_size
           @neighbors << grid[@row + i][@col + j]
         end
       end
@@ -58,10 +62,10 @@ class Spot
     if @is_bomb
       true
     elsif @number > 0
-      @image = @IMAGES.IMG_HASH[@number.to_s]
+      @image = @images.IMG_HASH[@number.to_s]
       false
     elsif @number == 0
-      @image = @IMAGES.IMG_HASH['empty']
+      @image = @images.IMG_HASH['empty']
       neighbors.each do |neighbor|
         if !neighbor.clicked && !neighbor.is_bomb && !neighbor.is_flagged
           neighbor.click
@@ -75,9 +79,9 @@ class Spot
     if not @clicked
       @is_flagged = !@is_flagged
       if @is_flagged
-        @image = @IMAGES.IMG_HASH['flag']
+        @image = @images.IMG_HASH['flag']
       else
-        @image = @IMAGES.IMG_HASH['empty']
+        @image = @images.IMG_HASH['empty']
       end
     end
   end
